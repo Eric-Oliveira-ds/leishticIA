@@ -1,4 +1,5 @@
 import streamlit as st
+from utils.classifier import classificar_imagem
 
 # Cabeçalho
 image = r"images\2020-10-17.jpg"
@@ -60,8 +61,6 @@ elif page == "Classificação de Imagens":
         else:
             image = captured_image
 
-        # Suponha que você já tenha uma função `classificar_imagem` que faz a classificação
         st.image(image, use_column_width=True)
-        # resultado = classificar_imagem(image)
-        resultado = "Exemplo de resultado da classificação"  # Placeholder
+        resultado = classificar_imagem(image)
         st.write(f'Resultado da classificação: {resultado}')
