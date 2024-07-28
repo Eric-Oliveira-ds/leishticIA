@@ -3,6 +3,7 @@ import cv2
 import numpy as np
 from utils.classifier import classificar_imagem
 
+
 def main():
     # Cabeçalho
     image_path = r"images\2020-10-17.jpg"
@@ -92,6 +93,17 @@ def main():
             st.image(st.session_state['image'], channels="BGR", use_column_width=True)
         else:
             st.info("Tire uma foto ou faça upload de uma imagem para classificação.")
+        # Exibir a isenção de responsabilidade no início da aplicação
+        st.markdown("""
+        # Isenção de Responsabilidade
+
+        Esta aplicação utiliza um modelo de inteligência artificial para classificar doenças a partir de imagens. **Os resultados fornecidos por esta aplicação são apenas para fins informativos e não substituem uma consulta médica profissional.**
+
+        Recomendamos fortemente que você procure um médico para um diagnóstico preciso e para o tratamento adequado.
+
+        **Ao utilizar esta aplicação, você concorda que compreende os riscos e limitações e que não responsabilizará os desenvolvedores por qualquer decisão tomada com base nos resultados fornecidos por esta ferramenta.**
+        """)
+
 
 if __name__ == "__main__":
     main()
