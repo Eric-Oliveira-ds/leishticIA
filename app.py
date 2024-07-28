@@ -8,12 +8,12 @@ def main():
     # Cabeçalho
     image_path = r"images\2020-10-17.jpg"
     st.sidebar.image(image_path, use_column_width=True)
-    st.title('Triagem de Leishmaniose e Tuberculose Cutânea com apoio da IA')
+    st.title('Triagem de Leishmaniose com apoio da IA')
 
     # Navegação
     st.sidebar.title("Navegação")
     page = st.sidebar.selectbox("Selecione a página", [
-                                "Sobre as Doenças", "Classificação de Imagens"])
+                                "Sobre a Doença", "Classificação de Imagens"])
 
     # Aba Lateral
     st.sidebar.title("Clínicas especializadas")
@@ -31,8 +31,8 @@ def main():
         "[LinkedIn](https://www.linkedin.com/in/eric-oliveira-ds/)")
 
     # Conteúdo da Página
-    if page == "Sobre as Doenças":
-        st.header('Sobre as Doenças')
+    if page == "Sobre a Doença":
+        st.header('Sobre a Doença')
         st.subheader('Leishmaniose')
         st.write("""
         - **Descrição**: A leishmaniose é uma doença parasitária transmitida pela picada de flebotomíneos infectados. A forma cutânea da leishmaniose provoca feridas na pele, que podem ser desfigurantes.
@@ -40,12 +40,6 @@ def main():
         - **Número de casos no Brasil**: Cerca de 3.500 casos são registrados anualmente, com a maioria dos casos concentrados nas regiões Norte, Nordeste e Centro-Oeste.
         """)
 
-        st.subheader('Tuberculose Cutânea')
-        st.write("""
-        - **Descrição**: A tuberculose cutânea é uma forma rara de tuberculose que afeta a pele. Pode manifestar-se de várias maneiras, incluindo lesões verrucosas e úlceras crônicas.
-        - **Causas**: É causada pela bactéria Mycobacterium tuberculosis.
-        - **Número de casos no Brasil**: Embora mais rara que outras formas de tuberculose, a tuberculose cutânea ainda é relevante em áreas endêmicas de tuberculose.
-        """)
     elif page == "Classificação de Imagens":
         st.header('Classificação de Imagens')
         st.write(
@@ -88,12 +82,16 @@ def main():
                 st.session_state['resultado'] = classificar_imagem(st.session_state['image'])
                 st.session_state['uploading'] = False
 
-        # Exibir imagem e resultado da classificação, se disponíveis
+        # Botão para limpar imagem e resultado
         if st.session_state['image'] is not None:
             st.image(st.session_state['image'], channels="BGR", use_column_width=True)
+            if st.button('Limpar'):
+                st.session_state['image'] = None
+                st.session_state['resultado'] = None
+                st.experimental_rerun()
         else:
             st.info("Tire uma foto ou faça upload de uma imagem para classificação.")
-        # Exibir a isenção de responsabilidade no início da aplicação
+
         st.markdown("""
         # Isenção de Responsabilidade
 

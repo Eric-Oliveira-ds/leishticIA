@@ -26,11 +26,15 @@ def classificar_imagem(image):
     classe_prevista = np.argmax(previsao)
 
     probabilidade_formatada = np.round(probabilidade * 100, 2)
+    limiar_decisao = 0.6  # Ajuste conforme necessário
 
-    if classe_prevista == 0:
-        st.write(f'A lesão se parece com leishmaniose com probabilidade de: {probabilidade_formatada}%')
+    if probabilidade_formatada < limiar_decisao:
+        st.write('A imagem não parece conter nenhuma ferida com alta confiança.')
     else:
-        st.write(f'A lesão se parece com tuberculose cutânea com probabilidade de: {probabilidade_formatada}%')
+        if classe_prevista == 0:
+            st.write(f'A lesão se parece com leishmaniose com probabilidade de: {probabilidade_formatada}%')
+        else:
+            st.write(f'A imagem não parece conter nenhuma ferida com alta confiança: {probabilidade_formatada}%')
 
     st.write('Procure hospitais especializados mais próximos para fazer uma avaliação médica!')
 
