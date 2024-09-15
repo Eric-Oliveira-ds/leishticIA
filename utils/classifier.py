@@ -1,7 +1,8 @@
 import cv2
 import streamlit as st
 import numpy as np
-from keras.models import model_from_json, Sequential
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.models import model_from_json
 from keras.saving import register_keras_serializable
 
 # Registrar a classe Sequential
@@ -18,23 +19,18 @@ loaded_model.compile(loss='categorical_crossentropy', optimizer='Adam', metrics=
 
 
 def classificar_imagem(image):
-    img = cv2.resize(image, (64, 64))
-    img = img / 255
-    img = img.reshape(-1, 64, 64, 3)
+    img = cv2.resize(image, (128, 128))
+    img = img / 255.0
+    img = img.reshape(-1, 128, 128, 3)
     previsao = loaded_model.predict(img)
     probabilidade = np.max(previsao)
     classe_prevista = np.argmax(previsao)
 
     probabilidade_formatada = np.round(probabilidade * 100, 2)
-    limiar_decisao = 0.6  # Ajuste conforme necessário
-
-    if probabilidade_formatada < limiar_decisao:
-        st.write('A imagem não parece conter nenhuma ferida com alta confiança.')
+    if classe_prevista == 0:
+        st.write(f'A lesão se parece com leishmaniose com probabilidade de: {probabilidade_formatada}%')
     else:
-        if classe_prevista == 0:
-            st.write(f'A lesão se parece com leishmaniose com probabilidade de: {probabilidade_formatada}%')
-        else:
-            st.write(f'A imagem não parece conter nenhuma ferida com alta confiança: {probabilidade_formatada}%')
+        st.write(f'Não foi possível classificar com certeza a imagem como havendo uma lesão por leishmaniose: {probabilidade_formatada}%')
 
     st.write('Procure hospitais especializados mais próximos para fazer uma avaliação médica!')
 
