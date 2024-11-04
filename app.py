@@ -55,27 +55,12 @@ def main():
         if 'resultado' not in st.session_state:
             st.session_state['resultado'] = None
 
-        # Botões para captura de imagem e upload
-        capture_image_button = st.button('Tirar Foto com Câmera')
         upload_image_button = st.button('Fazer Upload de Imagem')
-
-        # Captura de imagem com a câmera
-        if capture_image_button:
-            st.session_state['capturing'] = True
-            st.session_state['uploading'] = False
 
         # Upload de arquivo
         if upload_image_button:
             st.session_state['capturing'] = False
             st.session_state['uploading'] = True
-
-        if st.session_state.get('capturing', False):
-            captured_image = st.camera_input("Tire uma foto")
-            if captured_image is not None:
-                file_bytes = np.asarray(bytearray(captured_image.read()), dtype=np.uint8)
-                st.session_state['image'] = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
-                st.session_state['resultado'] = classify_image(st.session_state['image'])
-                st.session_state['capturing'] = False
 
         if st.session_state.get('uploading', False):
             uploaded_file = st.file_uploader(
@@ -88,14 +73,13 @@ def main():
 
         # Botão para limpar imagem e resultado
         if st.session_state['image'] is not None:
-            st.image(st.session_state['image'], channels="BGR", use_column_width=True)
+            st.image(st.session_state['image'], channels="BGR", width=300)
             if st.button('Limpar'):
                 st.session_state['image'] = None
                 st.session_state['resultado'] = None
                 st.experimental_rerun()
         else:
-            st.info("""Tire uma foto com qualidade e de preferência da região enquadrada da lesão.
-                    Ou faça upload de uma imagem para classificação.""")
+            st.info("""Faça o upload de uma imagem de alta qualidade da lesão para classifica-la.""")
 
         st.markdown("""
         # Isenção de responsabilidade
