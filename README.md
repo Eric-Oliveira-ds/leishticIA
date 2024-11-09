@@ -1,5 +1,7 @@
 # LeisHtic.IA
 
+- Project management on Trello, send invite to developer [Trello](https://trello.com/b/yPPiKIyV/leishticia)
+
 LeisHtic.IA is a proof-of-concept (POC) artificial intelligence-based application designed to classify leishmaniasis and pyoderma lesions from images, aiding in the differential diagnosis of these skin conditions.
 
 ## About the Diseases
