@@ -7,7 +7,7 @@ from PIL import Image
 
 # Ensure the architecture matches your trained model
 model = models.alexnet(pretrained=False)
-model.classifier[6] = torch.nn.Linear(4096, 2)  # Update output layer to have 2 outputs
+model.classifier[6] = torch.nn.Linear(4096, 5)  # Update output layer to have 2 outputs
 
 # Load the model weights
 model.load_state_dict(torch.load('model/alexnet_acc81_weights.pth'))
