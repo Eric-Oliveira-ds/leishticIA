@@ -8,7 +8,7 @@ def main():
     # Cabeçalho
     image_path = r"images/LeisHticIA.png"
     st.sidebar.image(image_path, use_column_width=True)
-    st.title('Triagem de leishmaniose e pioderma com apoio da IA')
+    st.title('Identificação de lesões causadas por doenças com apoio da IA')
 
     # Navegação
     st.sidebar.title("Navegação")
@@ -31,23 +31,15 @@ def main():
     # Conteúdo da Página
     if page == "Sobre as doenças":
         st.header('Sobre as doenças')
-        st.subheader('Leishmaniose')
+        st.subheader('Em desenvolvimento')
         st.write("""
-        - **Descrição**: A leishmaniose é uma doença parasitária transmitida pela picada de flebotomíneos infectados. A forma cutânea da leishmaniose provoca feridas na pele, que podem ser desfigurantes.
-        - **Causas**: É causada por protozoários do gênero Leishmania.
-        - **Número de casos no Brasil**: Cerca de 3.500 casos são registrados anualmente, com a maioria dos casos concentrados nas regiões Norte, Nordeste e Centro-Oeste.
-        """)
-        st.subheader('Pioderma')
-        st.write("""
-        - **Descrição**: Pioderma é uma infecção bacteriana na pele, que geralmente resulta em feridas, bolhas ou úlceras. Pode variar de leves irritações a infecções graves, dependendo da profundidade e extensão.
-        - **Causas**: É causado principalmente por bactérias como *Staphylococcus aureus* e *Streptococcus pyogenes*, que entram na pele através de cortes, picadas de inseto ou outras lesões.
-        - **Número de casos**: Pioderma é comum em países de clima quente e úmido e pode afetar pessoas de todas as idades. Em regiões tropicais, infecções de pele bacterianas representam uma parte significativa das doenças dermatológicas observadas.
+                Em desenvolvimento com novas doenças e uma nova base de dados. Por favor aguarde.
         """)
 
     elif page == "Classificação de imagens":
         st.header('Classificação de imagens')
         st.write(
-            'Faça upload de uma imagem para classificação ou tire uma foto diretamente da sua câmera:')
+            'Faça upload de uma imagem da sua galeria para classificação:')
 
         # Variável para armazenar a imagem e o resultado da classificação no estado da sessão
         if 'image' not in st.session_state:
@@ -77,7 +69,7 @@ def main():
             if st.button('Limpar'):
                 st.session_state['image'] = None
                 st.session_state['resultado'] = None
-                st.experimental_rerun()
+                st.rerun()
         else:
             st.info("""Faça o upload de uma imagem de alta qualidade da lesão para classifica-la.""")
 
