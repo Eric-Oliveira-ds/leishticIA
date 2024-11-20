@@ -13,12 +13,15 @@ def main():
     # Navegação
     st.sidebar.title("Navegação")
     page = st.sidebar.selectbox("Selecione a página", [
-                                "Sobre as doenças", "Classificação de imagens"])
+                                "Sobre as doenças",
+                                "Área do paciente",
+                                "Área do ACS",
+                                "Área do médico"])
 
     # Aba Lateral
     st.sidebar.title("Clínicas especializadas")
     st.sidebar.write("""
-    - [Hospital Universitário Dr. Edgar Santos](https://www.google.com/search?sca_esv=54722a0b5ffac30e&rlz=1C1ONGR_pt-PTBR1070BR1070&sxsrf=ADLYWILzrXmzgwQ_iQvrdT8E3kk5yER1Ig:1720656569393&q=Hospital+Universit%C3%A1rio+Dr.+Edgard+Santos&spell=1&sa=X&ved=2ahUKEwiFmeWc2Z2HAxUavJUCHTnRCIEQBSgAegQIDxAB&biw=1920&bih=911&dpr=1#)
+    - Em desenvolvimento...
     """)
 
     # Adicionar barra lateral
@@ -30,14 +33,39 @@ def main():
 
     # Conteúdo da Página
     if page == "Sobre as doenças":
-        st.header('Sobre as doenças')
-        st.subheader('Em desenvolvimento')
+        st.header('LeisHtic.IA')
+        st.subheader('A LeisHtic.IA é um projeto de pesquisa que utiliza de IA para classificar imagens cutaneas de leishmaniasis, pyoderma, diabetes, venosas com o objetivo de ajudar a diagnosticar e tratar essas doenças de forma mais eficiente.')
+        # Diabetic Wounds
         st.write("""
-                Em desenvolvimento com novas doenças e uma nova base de dados. Por favor aguarde.
-        """)
+                - **Descrição**: Feridas diabéticas são complicações comuns em pacientes com diabetes mal controlado. Elas podem levar a infecções graves e até amputações.
+                - **Causas**: Ocorrem devido a má circulação sanguínea e danos nos nervos periféricos, comuns em pessoas com diabetes.
+                - **Número de casos no Brasil**: Estima-se que mais de 80.000 amputações sejam realizadas anualmente no Brasil devido a complicações do diabetes, incluindo feridas diabéticas.
+                """)
 
-    elif page == "Classificação de imagens":
-        st.header('Classificação de imagens')
+        # Leishmaniose
+        st.write("""
+                - **Descrição**: A leishmaniose é uma doença parasitária transmitida pela picada de flebotomíneos infectados. A forma cutânea da leishmaniose provoca feridas na pele, que podem ser desfigurantes.
+                - **Causas**: É causada por protozoários do gênero Leishmania.
+                - **Número de casos no Brasil**: Cerca de 3.500 casos são registrados anualmente, com a maioria dos casos concentrados nas regiões Norte, Nordeste e Centro-Oeste.
+                """)
+
+        # Pyoderma
+        st.write("""
+                - **Descrição**: O pioderma é uma infecção bacteriana da pele, frequentemente causada por bactérias como Staphylococcus aureus e Streptococcus pyogenes. 
+                - **Causas**: A infecção pode ser resultado de feridas abertas, condições de higiene inadequada ou imunidade comprometida.
+                - **Número de casos no Brasil**: Não há estimativas exatas, mas infecções bacterianas da pele são muito comuns em áreas tropicais e úmidas, afetando milhares de pessoas anualmente.
+                """)
+
+        # Venous Ulcers
+        st.write("""
+                - **Descrição**: As úlceras venosas são feridas crônicas que ocorrem geralmente nas pernas, devido a problemas na circulação sanguínea. Elas são dolorosas e de difícil cicatrização.
+                - **Causas**: Resultam de insuficiência venosa crônica, onde as válvulas nas veias não funcionam adequadamente, causando acúmulo de sangue.
+                - **Número de casos no Brasil**: Afetam cerca de 1% da população adulta e até 3% dos idosos, especialmente em regiões urbanas.
+                """)
+
+    # Adicionar barra lateral
+    elif page == "Área do paciente":
+        st.header('Área do paciente')
         st.write(
             'Faça upload de uma imagem da sua galeria para classificação:')
 
