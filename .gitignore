@@ -5,6 +5,7 @@ __pycache__/
 *mlruns
 *mlartifacts
 *.pth
+*.streamlit
 
 # C extensions
 *.so

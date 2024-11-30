@@ -1,11 +1,24 @@
 import streamlit as st
-import cv2
-import numpy as np
-from utils.classifier import classify_image
+from utils.paciente import patient_area
 
 
 def main():
     # Cabeçalho
+    """
+    Entry point for the Streamlit application.
+
+    This function is the main entry point for the Streamlit application. It
+    contains the code to create the user interface, including the navigation,
+    the image upload and classification, and the display of the results.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    None
+    """
     image_path = r"images/LeisHticIA.png"
     st.sidebar.image(image_path, use_column_width=True)
     st.title('Identificação de lesões causadas por doenças com apoio da IA')
@@ -62,44 +75,16 @@ def main():
                 - **Causas**: Resultam de insuficiência venosa crônica, onde as válvulas nas veias não funcionam adequadamente, causando acúmulo de sangue.
                 - **Número de casos no Brasil**: Afetam cerca de 1% da população adulta e até 3% dos idosos, especialmente em regiões urbanas.
                 """)
+        # Carcinoma Basocelular
+        st.write("""
+                - **Descrição**: O carcinoma basocelular é o tipo mais comum de câncer de pele, caracterizado pelo crescimento anormal e descontrolado de células da camada basal da epiderme. Geralmente é localmente invasivo e raramente se espalha para outras partes do corpo.
+                - **Causas**: Está relacionado principalmente à exposição prolongada e repetitiva à radiação ultravioleta (UV), seja por exposição ao sol ou ao uso de câmaras de bronzeamento artificial. Outros fatores de risco incluem idade avançada, pele clara e histórico familiar de câncer de pele.
+                - **Número de casos no Brasil**: Estima-se que cerca de 176 mil novos casos de câncer de pele não melanoma, incluindo o carcinoma basocelular, sejam diagnosticados anualmente, representando aproximadamente 30% de todos os casos de câncer no país.
+                """)
 
     # Adicionar barra lateral
     elif page == "Área do paciente":
-        st.header('Área do paciente')
-        st.write(
-            'Faça upload de uma imagem da sua galeria para classificação:')
-
-        # Variável para armazenar a imagem e o resultado da classificação no estado da sessão
-        if 'image' not in st.session_state:
-            st.session_state['image'] = None
-        if 'resultado' not in st.session_state:
-            st.session_state['resultado'] = None
-
-        upload_image_button = st.button('Fazer Upload de Imagem')
-
-        # Upload de arquivo
-        if upload_image_button:
-            st.session_state['capturing'] = False
-            st.session_state['uploading'] = True
-
-        if st.session_state.get('uploading', False):
-            uploaded_file = st.file_uploader(
-                "Escolha uma imagem...", type=["jpg", "jpeg", "png"])
-            if uploaded_file is not None:
-                file_bytes = np.asarray(bytearray(uploaded_file.read()), dtype=np.uint8)
-                st.session_state['image'] = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
-                st.session_state['resultado'] = classify_image(st.session_state['image'])
-                st.session_state['uploading'] = False
-
-        # Botão para limpar imagem e resultado
-        if st.session_state['image'] is not None:
-            st.image(st.session_state['image'], channels="BGR", width=300)
-            if st.button('Limpar'):
-                st.session_state['image'] = None
-                st.session_state['resultado'] = None
-                st.rerun()
-        else:
-            st.info("""Faça o upload de uma imagem de alta qualidade da lesão para classifica-la.""")
+        patient_area()
 
         st.markdown("""
         # Isenção de responsabilidade

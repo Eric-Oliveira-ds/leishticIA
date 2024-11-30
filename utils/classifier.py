@@ -15,8 +15,8 @@ def load_model():
         A pre-trained AlexNet model with 5 output classes, loaded from a file.
     """
     model = models.alexnet(weights='AlexNet_Weights.IMAGENET1K_V1')
-    model.classifier[6] = torch.nn.Linear(4096, 5)
-    model.load_state_dict(torch.load('model/alexnet_acc_0.82_weights.pth',
+    model.classifier[6] = torch.nn.Linear(4096, 6)
+    model.load_state_dict(torch.load('models/alexnet_acc_0.74_num_classes6_weights.pth',
                                      weights_only=True,
                                      map_location=torch.device('cpu')))
     model.eval()
@@ -61,7 +61,7 @@ def classify_image(image):
         formatted_probability = max_probability * 100
         if predicted_class == 0:
             st.write(
-                f'A lesão aparenta ser causada por Diabetis com uma probabilidade de: '
+                f'A lesão aparenta ser causada por carcinoma basocelular com uma probabilidade de: '
                 f'{formatted_probability:.2f}%'
             )
             st.write(
@@ -69,7 +69,7 @@ def classify_image(image):
             )
         elif predicted_class == 1:
             st.write(
-                f'A lesão aparenta ser causada por Leishmaniose com uma probabilidade de: '
+                f'A lesão aparenta ser causada por diabetes com uma probabilidade de: '
                 f'{formatted_probability:.2f}%'
             )
             st.write(
@@ -77,9 +77,17 @@ def classify_image(image):
             )
         elif predicted_class == 2:
             st.write(
-                'Você não aparenta ter uma lesão, tem certeza que subiu uma foto de qualidade e com uma lesão cutânea ?'
+                f'A lesão aparenta ser causada por leishmaniose com uma probabilidade de: '
+                f'{formatted_probability:.2f}%'
+            )
+            st.write(
+                'Consulte hospitais especializados mais próximos para uma avaliação médica!'
             )
         elif predicted_class == 3:
+            st.write(
+                'Você não aparenta ter uma lesão, tem certeza que subiu uma foto de qualidade e com uma lesão cutânea ?'
+            )
+        elif predicted_class == 4:
             st.write(
                 f'A lesão aparenta ser causada por pioderma com uma probabilidade de: '
                 f'{formatted_probability:.2f}%'
@@ -87,7 +95,7 @@ def classify_image(image):
             st.write(
                 'Consulte hospitais especializados mais próximos para uma avaliação médica!'
             )
-        elif predicted_class == 4:
+        elif predicted_class == 5:
             st.write(
                 f'A lesão aparenta ser causada por doença venosa com uma probabilidade de: '
                 f'{formatted_probability:.2f}%'
