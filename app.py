@@ -20,7 +20,7 @@ def main():
     None
     """
     image_path = r"images/LeisHticIA.png"
-    st.sidebar.image(image_path, use_column_width=True)
+    st.sidebar.image(image_path, use_container_width=True)
     st.title('Identificação de lesões causadas por doenças com apoio da IA')
 
     # Navegação
@@ -87,13 +87,13 @@ def main():
         patient_area()
 
         st.markdown("""
-        # Isenção de responsabilidade
+                # Isenção de responsabilidade
 
-        Esta aplicação utiliza um modelo de inteligência artificial para classificar doenças a partir de imagens. **Os resultados fornecidos por esta aplicação são apenas para fins informativos e não substituem uma consulta médica profissional.**
+                Esta aplicação utiliza um modelo de inteligência artificial para classificar doenças a partir de imagens. **Os resultados fornecidos por esta aplicação são apenas para fins informativos e não substituem uma consulta médica profissional.**
 
-        Recomendamos fortemente que você procure um médico para um diagnóstico preciso e para o tratamento adequado.
+                Recomendamos fortemente que você procure um médico para um diagnóstico preciso e para o tratamento adequado.
 
-        **Ao utilizar esta aplicação, você concorda que compreende os riscos e limitações e que não responsabilizará os desenvolvedores por qualquer decisão tomada com base nos resultados fornecidos por esta ferramenta.**
+                **Ao utilizar esta aplicação, você concorda que compreende os riscos e limitações e que não responsabilizará os desenvolvedores por qualquer decisão tomada com base nos resultados fornecidos por esta ferramenta.**
         """)
 
 

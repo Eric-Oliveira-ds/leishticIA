@@ -62,7 +62,7 @@ def classify_image(image):
         if predicted_class == 0:
             st.write(
                 f'A lesão aparenta ser causada por carcinoma basocelular com uma probabilidade de: '
-                f'{formatted_probability:.2f}%'
+                f'{formatted_probability:.0f}%'
             )
             st.write(
                 'Consulte hospitais especializados mais próximos para uma avaliação médica!'
@@ -70,7 +70,7 @@ def classify_image(image):
         elif predicted_class == 1:
             st.write(
                 f'A lesão aparenta ser causada por diabetes com uma probabilidade de: '
-                f'{formatted_probability:.2f}%'
+                f'{formatted_probability:.0f}%'
             )
             st.write(
                 'Consulte hospitais especializados mais próximos para uma avaliação médica!'
@@ -78,7 +78,7 @@ def classify_image(image):
         elif predicted_class == 2:
             st.write(
                 f'A lesão aparenta ser causada por leishmaniose com uma probabilidade de: '
-                f'{formatted_probability:.2f}%'
+                f'{formatted_probability:.0f}%'
             )
             st.write(
                 'Consulte hospitais especializados mais próximos para uma avaliação médica!'
@@ -90,7 +90,7 @@ def classify_image(image):
         elif predicted_class == 4:
             st.write(
                 f'A lesão aparenta ser causada por pioderma com uma probabilidade de: '
-                f'{formatted_probability:.2f}%'
+                f'{formatted_probability:.0f}%'
             )
             st.write(
                 'Consulte hospitais especializados mais próximos para uma avaliação médica!'
@@ -98,7 +98,7 @@ def classify_image(image):
         elif predicted_class == 5:
             st.write(
                 f'A lesão aparenta ser causada por doença venosa com uma probabilidade de: '
-                f'{formatted_probability:.2f}%'
+                f'{formatted_probability:.0f}%'
             )
             st.write(
                 'Consulte hospitais especializados mais próximos para uma avaliação médica!'
