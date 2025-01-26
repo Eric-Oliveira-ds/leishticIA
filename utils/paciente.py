@@ -9,6 +9,9 @@ from utils.classifier import classify_image
 from datetime import datetime
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker
+import folium
+from streamlit_folium import st_folium
+import googlemaps
 
 load_dotenv()
 
@@ -18,6 +21,9 @@ port = os.getenv('DB_PORT', 5432)
 database = os.getenv('DB_DATABASE', 'LeisHticIA_gold')
 user = os.getenv('DB_USER', 'postgres')
 password = os.environ.get("PG_PASSWORD")
+
+# Configuração da API do Google Maps
+gmaps = googlemaps.Client(key=os.getenv('GOOGLE_MAPS_API_KEY'))
 
 # Configurando a conexão com o banco de dados usando SQLAlchemy
 DATABASE_URL = f"postgresql://{user}:{password}@{host}:{port}/{database}"
@@ -34,6 +40,85 @@ def get_engine():
 # Inicializando o SessionMaker
 engine = get_engine()
 Session = sessionmaker(bind=engine)
+
+
+# Funções auxiliares locais
+def get_location_from_address(address):
+    """Converte um endereço em coordenadas geográficas (latitude, longitude)."""
+    geocode_result = gmaps.geocode(address)
+    if geocode_result:
+        location = geocode_result[0]['geometry']['location']
+        return location['lat'], location['lng']
+    return None, None
+
+
+days_translation = {
+    "Monday": "Segunda-feira",
+    "Tuesday": "Terça-feira",
+    "Wednesday": "Quarta-feira",
+    "Thursday": "Quinta-feira",
+    "Friday": "Sexta-feira",
+    "Saturday": "Sábado",
+    "Sunday": "Domingo"
+}
+
+
+def format_hours(hours):
+    """Formata o horário no padrão brasileiro (24 horas)."""
+    hours = hours.replace(" AM", "").replace(" PM", "")
+    if "PM" in hours:
+        parts = hours.split(" – ")
+        if len(parts) == 2:
+            start, end = parts
+            start = str(int(start.split(":")[0]) + 12) + ":" + start.split(":")[1]
+            end = str(int(end.split(":")[0]) + 12) + ":" + end.split(":")[1]
+            return f"{start} – {end}"
+    return hours
+
+
+def find_nearby_hospitals(latitude, longitude, radius=5000):
+    """Encontra hospitais próximos à localização fornecida, especializados em feridas e edemas."""
+    # Palavras-chave para filtrar hospitais especializados
+    keyword = "tratamento de feridas, tratamento de edemas, tratamento de cancer, tratamento de diabetes"
+
+    # Realiza a busca na API do Google Places
+    places_result = gmaps.places_nearby(
+        location=(latitude, longitude),
+        radius=radius,
+        type='hospital',
+        keyword=keyword  # Filtra por palavras-chave
+    )
+
+    hospitals = []
+    for place in places_result.get('results', []):
+        # Obtém detalhes adicionais do lugar, incluindo o horário de funcionamento
+        place_details = gmaps.place(place['place_id'], fields=["name", "vicinity", "rating", "geometry", "opening_hours"])
+
+        name = place_details['result'].get('name', 'Nome não disponível')
+        address = place_details['result'].get('vicinity', 'Endereço não disponível')
+        rating = place_details['result'].get('rating', 'N/A')
+        location = place_details['result']['geometry']['location']
+        
+        # Obtém o horário de funcionamento
+        opening_hours = place_details['result'].get('opening_hours', {})
+        if opening_hours:
+            hours = opening_hours.get('weekday_text', ['Horário não disponível'])
+            # Traduz os dias da semana e formata o horário
+            hours_pt_br = []
+            for day in hours:
+                if ":" in day:  # Verifica se é um dia com horário
+                    day_name, time = day.split(":", 1)
+                    day_name = days_translation.get(day_name.strip(), day_name.strip())
+                    time = format_hours(time.strip())
+                    hours_pt_br.append(f"{day_name}: {time}")
+                else:
+                    hours_pt_br.append(day)
+        else:
+            hours_pt_br = ['Horário não disponível']
+
+        hospitals.append((name, address, rating, location['lat'], location['lng'], hours_pt_br))
+    
+    return hospitals
 
 
 # Página de login para o paciente
@@ -115,7 +200,7 @@ def register():
                 return
 
             # Gera o hash da senha
-            hashed_password = bcrypt.hashpw(senha.encode('utf-8'), bcrypt.gensalt(12)).decode('utf-8')
+            hashed_password = bcrypt.hashpw(senha.encode('utf-8'), bcrypt.gensalt(12))
             session = Session()
 
             try:
@@ -196,6 +281,53 @@ def patient_area():
 
         if st.session_state["image"] is None:
             st.info("Faça o upload de uma imagem de alta qualidade da lesão para classificá-la.")
+
+        # Coletar localização do paciente
+        st.subheader("Localização do Paciente")
+        patient_address = st.text_input("Digite seu endereço para encontrar hospitais próximos:")
+
+        if patient_address:
+            latitude, longitude = get_location_from_address(patient_address)
+            if latitude and longitude:
+                st.write(f"Coordenadas: Latitude {latitude}, Longitude {longitude}")
+                hospitals = find_nearby_hospitals(latitude, longitude)
+                if hospitals:
+                    st.subheader("Hospitais Especializados Próximos:")
+
+                    # Criar um mapa centrado na localização do paciente
+                    m = folium.Map(location=[latitude, longitude], zoom_start=13)
+
+                    # Adicionar marcador para a localização do paciente
+                    folium.Marker(
+                        location=[latitude, longitude],
+                        popup="Sua Localização",
+                        icon=folium.Icon(color="blue")
+                    ).add_to(m)
+
+                    # Adicionar marcadores para os hospitais
+                    for hospital in hospitals:
+                        folium.Marker(
+                            location=[hospital[3], hospital[4]],
+                            popup=f"{hospital[0]} - Avaliação: {hospital[2]}",
+                            icon=folium.Icon(color="red")
+                        ).add_to(m)
+
+                    # Exibir o mapa no Streamlit
+                    st_folium(m, width=700, height=500)
+
+                    # Exibir detalhes dos hospitais
+                    for hospital in hospitals:
+                        st.write(f"Nome: {hospital[0]}")
+                        st.write(f"Endereço: {hospital[1]}")
+                        st.write(f"Avaliação: {hospital[2]}")
+                        st.write("Horário de Funcionamento:")
+                        for day in hospital[5]:  # hospital[5] contém o horário de funcionamento
+                            st.write(f"- {day}")
+                        st.write("---")
+                else:
+                    st.warning("Nenhum hospital especializado encontrado nas proximidades.")
+            else:
+                st.error("Não foi possível encontrar a localização. Verifique o endereço e tente novamente.")
 
 
 # Executar o aplicativo

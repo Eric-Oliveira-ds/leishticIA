@@ -31,12 +31,6 @@ def main():
                                 "Área do ACS",
                                 "Área do médico"])
 
-    # Aba Lateral
-    st.sidebar.title("Clínicas especializadas")
-    st.sidebar.write("""
-    - Em desenvolvimento...
-    """)
-
     # Adicionar barra lateral
     st.sidebar.markdown("---")
     st.sidebar.markdown("Autor: Eric Oliveira")
