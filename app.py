@@ -1,5 +1,6 @@
 import streamlit as st
 from utils.paciente import patient_area
+from utils.agente_saude import acs_area
 
 
 def main():
@@ -79,6 +80,20 @@ def main():
     # Adicionar barra lateral
     elif page == "Área do paciente":
         patient_area()
+
+        st.markdown("""
+                # Isenção de responsabilidade
+
+                Esta aplicação utiliza um modelo de inteligência artificial para classificar doenças a partir de imagens. **Os resultados fornecidos por esta aplicação são apenas para fins informativos e não substituem uma consulta médica profissional.**
+
+                Recomendamos fortemente que você procure um médico para um diagnóstico preciso e para o tratamento adequado.
+
+                **Ao utilizar esta aplicação, você concorda que compreende os riscos e limitações e que não responsabilizará os desenvolvedores por qualquer decisão tomada com base nos resultados fornecidos por esta ferramenta.**
+        """)
+
+    # Adicionar barra lateral
+    elif page == "Área do ACS":
+        acs_area()
 
         st.markdown("""
                 # Isenção de responsabilidade
