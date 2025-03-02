@@ -240,7 +240,6 @@ def register():
 
 
 # Página principal da área do paciente
-# Página principal da área do paciente
 def patient_area():
     if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
         if "show_register" in st.session_state and st.session_state["show_register"]:

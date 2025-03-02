@@ -1,6 +1,7 @@
 import streamlit as st
 from utils.paciente import patient_area
 from utils.agente_saude import acs_area
+from utils.medico import medico_area
 
 
 def main():
@@ -77,7 +78,6 @@ def main():
                 - **Número de casos no Brasil**: Estima-se que cerca de 176 mil novos casos de câncer de pele não melanoma, incluindo o carcinoma basocelular, sejam diagnosticados anualmente, representando aproximadamente 30% de todos os casos de câncer no país.
                 """)
 
-    # Adicionar barra lateral
     elif page == "Área do paciente":
         patient_area()
 
@@ -91,7 +91,6 @@ def main():
                 **Ao utilizar esta aplicação, você concorda que compreende os riscos e limitações e que não responsabilizará os desenvolvedores por qualquer decisão tomada com base nos resultados fornecidos por esta ferramenta.**
         """)
 
-    # Adicionar barra lateral
     elif page == "Área do ACS":
         acs_area()
 
@@ -104,6 +103,9 @@ def main():
 
                 **Ao utilizar esta aplicação, você concorda que compreende os riscos e limitações e que não responsabilizará os desenvolvedores por qualquer decisão tomada com base nos resultados fornecidos por esta ferramenta.**
         """)
+
+    elif page == "Área do médico":
+        medico_area()
 
 
 if __name__ == "__main__":
