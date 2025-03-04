@@ -34,79 +34,49 @@ transform = transforms.Compose([
 ])
 
 
+# Classes do modelo
+CLASSES = [
+    "Carcinoma Basocelular",
+    "Diabetes",
+    "Leishmaniose",
+    "Sem Lesão",
+    "Pioderma",
+    "Venosa"
+]
+
+MENSAGENS = [
+    "A lesão aparenta ser causada por carcinoma basocelular.",
+    "A lesão aparenta ser causada por diabetes.",
+    "A lesão aparenta ser causada por leishmaniose.",
+    "Você não aparenta ter uma lesão. Tem certeza que subiu uma foto de qualidade e com uma lesão cutânea?",
+    "A lesão aparenta ser causada por pioderma.",
+    "A lesão aparenta ser causada por doença venosa."
+]
+
+
 def classify_image(image):
-    """
-    Classifies the given image to detect leishmaniasis lesions.
+    """Classifica a imagem e retorna a classe predita e sua probabilidade."""
 
-    Args:
-        image (numpy.ndarray): Loaded image to classify.
-
-    Returns:
-        torch.Tensor: Predicted probabilities for each class.
-
-    """
-    # Preprocess the image
+    # Pré-processamento da imagem
     image = Image.fromarray(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
     img = transform(image).unsqueeze(0)
 
-    # Perform prediction with the model
+    # Predição
     with torch.no_grad():
         outputs = model(img)
-        probability = F.softmax(outputs, dim=1)
-        max_probability = torch.max(probability).item()
-        predicted_class = torch.argmax(probability).item()
+        probabilities = F.softmax(outputs, dim=1)
 
-    # Check if confidence is high enough for classification
+    # Obter a classe com maior probabilidade
+    max_probability, predicted_class = torch.max(probabilities, dim=1)
+    max_probability = max_probability.item()
+    predicted_class = predicted_class.item()
+
+    # Exibir resultado
     if max_probability >= 0.7:
-        formatted_probability = max_probability * 100
-        if predicted_class == 0:
-            st.write(
-                f'A lesão aparenta ser causada por carcinoma basocelular com uma probabilidade de: '
-                f'{formatted_probability:.0f}%'
-            )
-            st.write(
-                'Consulte hospitais especializados mais próximos para uma avaliação médica!'
-            )
-        elif predicted_class == 1:
-            st.write(
-                f'A lesão aparenta ser causada por diabetes com uma probabilidade de: '
-                f'{formatted_probability:.0f}%'
-            )
-            st.write(
-                'Consulte hospitais especializados mais próximos para uma avaliação médica!'
-            )
-        elif predicted_class == 2:
-            st.write(
-                f'A lesão aparenta ser causada por leishmaniose com uma probabilidade de: '
-                f'{formatted_probability:.0f}%'
-            )
-            st.write(
-                'Consulte hospitais especializados mais próximos para uma avaliação médica!'
-            )
-        elif predicted_class == 3:
-            st.write(
-                'Você não aparenta ter uma lesão, tem certeza que subiu uma foto de qualidade e com uma lesão cutânea ?'
-            )
-        elif predicted_class == 4:
-            st.write(
-                f'A lesão aparenta ser causada por pioderma com uma probabilidade de: '
-                f'{formatted_probability:.0f}%'
-            )
-            st.write(
-                'Consulte hospitais especializados mais próximos para uma avaliação médica!'
-            )
-        elif predicted_class == 5:
-            st.write(
-                f'A lesão aparenta ser causada por doença venosa com uma probabilidade de: '
-                f'{formatted_probability:.0f}%'
-            )
-            st.write(
-                'Consulte hospitais especializados mais próximos para uma avaliação médica!'
-            )
+        st.write(f"{MENSAGENS[predicted_class]} Probabilidade: {max_probability * 100:.0f}%")
+        if predicted_class != 5:
+            st.write("Consulte hospitais especializados mais próximos para uma avaliação médica!")
     else:
-        st.write(
-            "Confiança insuficiente para uma classificação precisa. "
-            "Tente uma imagem mais clara."
-        )
+        st.write("Confiança insuficiente para uma classificação precisa. Tente uma imagem mais clara.")
 
-    return probability
+    return CLASSES[predicted_class], max_probability
