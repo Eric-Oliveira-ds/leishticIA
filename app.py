@@ -2,7 +2,6 @@ import streamlit as st
 from utils.paciente import patient_area
 from utils.agente_saude import acs_area
 from utils.medico import medico_area
-from utils.classifier import classify_image
 
 
 def main():

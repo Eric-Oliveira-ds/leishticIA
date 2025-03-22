@@ -39,6 +39,24 @@ Session = sessionmaker(bind=engine)
 
 # Página de login/cadastro do médico
 def medico_login():
+    """
+    Handles the login process for the doctor.
+
+    This function displays a login interface for doctors, allowing them to enter their
+    username and password. If the login button is clicked, it verifies the credentials
+    against the database. If the credentials are valid, the session state is updated
+    to reflect that the doctor is logged in. If the credentials are invalid, an error message
+    is shown. It also provides an option to navigate to the registration page if the
+    doctor does not have an account.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    None
+    """
     st.title("Login do Médico")
     username = st.text_input("Nome")
     password = st.text_input("Senha", type="password")
@@ -70,6 +88,24 @@ def medico_login():
 
 # Página de cadastro do medico
 def medico_register():
+    """
+    Handles the registration process for a new doctor.
+
+    This function displays a registration form for doctors, requiring them to input
+    their name, password, and hospital affiliation. Upon submission, it validates the
+    input fields and then hashes the password before inserting the new doctor record
+    into the database. If registration is successful, it shows a success message and
+    resets the registration form. In case of an error during database insertion, it
+    displays an error message and rolls back the transaction.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    None
+    """
     st.title("Cadastro do Médico")
     nome = st.text_input("Nome")
     senha = st.text_input("Senha", type="password")
@@ -106,6 +142,20 @@ def medico_register():
 
 
 def medico_area():
+    """
+    Página principal da área do médico.
+
+    Essa página permite que o médico cadastre pacientes, visualize as informações
+    do paciente e faça upload de imagens para análise.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    None
+    """
     if "medico_logged_in" not in st.session_state or not st.session_state["medico_logged_in"]:
         if "show_register" in st.session_state and st.session_state["show_register"]:
             medico_register()

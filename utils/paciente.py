@@ -123,6 +123,22 @@ def find_nearby_hospitals(latitude, longitude, radius=5000):
 
 # Página de login para o paciente
 def patient_login():
+    """
+    Controla o fluxo de login/cadastro do paciente.
+
+    Se o paciente estiver logado, exibe mensagem de boas-vindas e permite o cadastro de 
+    les es. Caso contr rio, verifica se o bot o de cadastro foi apertado e, se sim, chama a 
+    fun o de cadastro, sen o, chama a fun o de login.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    None
+    """
+
     st.subheader("Login do Paciente")
     username = st.text_input("Nome de Usuário")
     password = st.text_input("Senha", type="password")
@@ -160,6 +176,20 @@ def patient_login():
 
 # Página de cadastro
 def register():
+    """
+    Fun o que permite o cadastro de pacientes.
+
+    Essa fun o   chamada quando o paciente clica no bot o "Cadastrar-se" na p gina de login.
+    Ela exibe um formul rio para o paciente preencher suas informa es.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    None
+    """
     st.title("Cadastro do Paciente")
 
     if 'imagem_bytes' not in st.session_state:
@@ -241,6 +271,21 @@ def register():
 
 # Página principal da área do paciente
 def patient_area():
+    """
+    Página principal da área do paciente.
+
+    Essa página permite que o paciente faça upload de uma imagem para análise e visualize
+    os resultados. Além disso, também permite que o paciente informe seu endereço e visualize
+    hospitais especializados próximos.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    None
+    """
     if "logged_in" not in st.session_state or not st.session_state["logged_in"]:
         if "show_register" in st.session_state and st.session_state["show_register"]:
             register()

@@ -23,7 +23,12 @@ DATABASE_URL = f"postgresql://{user}:{password}@{host}:{port}/{database}"
 @st.cache_resource
 def get_engine():
     """
-    Retorna o engine do SQLAlchemy para conexão com o banco de dados.
+    Retorna o engine do SQLAlchemy para conex o com o banco de dados.
+    
+    Returns
+    -------
+    engine : sqlalchemy.engine.Engine
+        O engine do SQLAlchemy para conex o com o banco de dados.
     """
     return create_engine(DATABASE_URL)
 
@@ -36,6 +41,24 @@ Session = sessionmaker(bind=engine)
 
 
 def acs_login():
+    """
+    Handles the login process for Community Health Agents (ACS).
+
+    This function displays a login interface for ACS, allowing them to enter their
+    username and password. If the login button is clicked, it verifies the credentials
+    against the database. If the credentials are valid, the session state is updated
+    to reflect that the ACS is logged in. If the credentials are invalid, an error message
+    is shown. It also provides an option to navigate to the registration page if the
+    ACS does not have an account.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    None
+    """
     st.title("Login do ACS")
     username = st.text_input("Nome")
     password = st.text_input("Senha", type="password")
@@ -68,6 +91,17 @@ def acs_login():
 
 
 def acs_register():
+    """
+    Função para cadastro de um novo ACS.
+
+    Parameters
+    ----------
+    None
+
+    Returns
+    -------
+    None
+    """
     st.title("Cadastro do ACS")
     nome = st.text_input("Nome")
     senha = st.text_input("Senha", type="password")
@@ -112,6 +146,13 @@ def acs_register():
 
 
 def acs_area():
+    """
+    Controla o fluxo de login/cadastro de Agentes Comunitários de Saúde.
+
+    Se o ACS estiver logado, exibe mensagem de boas-vindas e permite o cadastro de pacientes.
+    Caso contrário, verifica se o botão de cadastro foi apertado e, se sim, chama a função
+    de cadastro, senão, chama a função de login.
+    """
     if "acs_logged_in" not in st.session_state or not st.session_state["acs_logged_in"]:
         if "show_register" in st.session_state and st.session_state["show_register"]:
             acs_register()
@@ -121,6 +162,3 @@ def acs_area():
         st.success(f"Bem-vindo, {st.session_state['acs_user']['nome']}!")
         st.write("Agora você pode cadastrar pacientes.")
         register()
-
-# if __name__ == "__main__":
-#     acs_area()

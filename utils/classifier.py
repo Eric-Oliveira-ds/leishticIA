@@ -55,9 +55,27 @@ MENSAGENS = [
 
 
 def classify_image(image):
-    """Classifica a imagem e retorna a classe predita e sua probabilidade."""
 
     # Pré-processamento da imagem
+    """
+    Classifies an input image into one of the predefined classes.
+
+    This function processes the input image to predict its class using
+    a pre-trained AlexNet model. It transforms the image, makes predictions,
+    and returns the most probable class along with its probability. If the
+    probability is high enough, a message related to the predicted class is
+    displayed.
+
+    Parameters
+    ----------
+    image : np.ndarray
+        The input image as a NumPy array in BGR format.
+
+    Returns
+    -------
+    tuple
+        A tuple containing the predicted class (str) and the maximum probability (float).
+    """
     image = Image.fromarray(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
     img = transform(image).unsqueeze(0)
 
