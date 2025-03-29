@@ -1,81 +1,76 @@
-# LeisHtic.IA
+# LeisHtic.IA - AI-Assisted Skin Lesion Classification
 
-LeisHtic.IA is a proof-of-concept (POC) artificial intelligence-based application designed to classify leishmaniasis and pyoderma lesions from images, aiding in the differential diagnosis of these skin conditions.
+## Overview
+LeisHtic.IA is a research project that leverages artificial intelligence (AI) to classify skin lesion images associated with diseases such as **leishmaniasis, pyoderma, diabetes, venous ulcers, and carcinoma basocelular**. The goal is to assist in diagnosis and improve treatment efficiency.
 
-## About the Diseases
+## Gif Demo
+![image](images/demo_leishticia.gif)
 
-Leishmaniasis: A disease caused by Leishmania parasites and transmitted by sandfly bites. It can cause skin lesions or affect internal organs.
-Pyoderma: A bacterial skin infection that produces pus and painful lesions, typically caused by Staphylococcus or Streptococcus bacteria.
-Motivation
-The project originated from the author’s experience with cutaneous leishmaniasis. The diagnosis was challenging, requiring over a year for visual confirmation by a specialized doctor. Leishmaniasis affects approximately 3,500 people per year in Brazil and shares characteristics with pyoderma, which led to developing a classifier that differentiates between these lesions.
+## Features
 
-## Methodology
+### 1. Patient Area
+- **Image Upload & Classification**: Patients can upload images of skin lesions, and the AI model will predict the disease category.
+- **Patient Registration**: Secure storage of patient information.
+- **Geolocation of Specialized Hospitals**: Uses Google Maps API to find nearby hospitals specialized in treating skin lesions.
+![image](images/paciente_logou.png)
 
-### Scientific Research
-This POC is based on research from three studies on lesion detection and classification using AI, including:
+### 2. Community Health Agent (ACS) Area
+- **Patient Registration by ACS**: Agents can register new patients and upload lesion images.
+- **Lesion Image Capture**: Direct image capture using a camera for real-time analysis.
+- **SUS Verification**: Checks patient eligibility for public healthcare services.
+- **Hospital Availability Check**: Finds the nearest available medical assistance.
+- **Patient Referral**: Directs patients to the appropriate medical facilities.
+![image](images/cadastro_acs.png)
 
-Deep learning model for cutaneous leishmaniasis detection and classification with YOLOv5.
-Automated identification of cutaneous leishmaniasis lesions using AI.
-Image processing for detecting local inflammation in cutaneous leishmaniasis.
-Data Acquisition
-The dataset includes 68 publicly sourced images from the internet, with 39 leishmaniasis and 29 pyoderma images.
+### 3. Doctor Area
+- **Patient Data Access**: Allows doctors to review patient information and lesion classification results.
+- **Medical Diagnosis Support**: Provides additional insights for healthcare professionals based on AI predictions.
+![image](images/logou_medico.png)
 
-## Model Development
+### 4. Skin Disease Information (Home Page)
+- **Educational Content**: Descriptions, causes, and prevalence of classified diseases.
+![image](images/home.png)
 
-- Model: Pre-trained AlexNet, adapted for binary classification between leishmaniasis and pyoderma.
-- Data Transformations: Techniques like resizing, horizontal and vertical flips, brightness, and contrast adjustments were applied to enhance the training set’s variability.
-- Model Evaluation:
-The model was evaluated using metrics like recall, precision, F1-score, and a confusion matrix.
+## Technologies Used
+- **Deep Learning Model**: AlexNet (PyTorch) for image classification.
+- **Framework**: Streamlit for web application development.
+- **Database**: PostgreSQL for patient, acs and doctor data storage.
+- **Image Processing**: OpenCV for image handling and preprocessing.
+- **Google Maps API**: For hospital location services.
 
-## Data and Transformations
+## Installation & Setup
+```bash
+# Clone the repository
+git clone https://github.com/Eric-Oliveira-ds/leishticIA/tree/main
+cd LeisHticIA
 
-Training data was enriched through transformations, including:
+# Create a virtual environment
+python -m venv env
+source env/bin/activate   # On Windows use: env\Scripts\activate
 
-| Transformation      | Description                      |
-|---------------------|----------------------------------|
-| **Resizing**        | 224x224 pixels                   |
-| **Flips**           | Horizontal and vertical flips    |
-| **Brightness/Contrast** | Enhanced image variability    |
+# Install dependencies
+pip install -r requirements.txt
+
+# Run the application
+streamlit run app.py
+```
+
+## API Requirements
+- Google Maps API requires **billing enabled** on your Google Cloud Project.
+- Enable the following APIs:
+  - **Geocoding API**
+  - **Places API**
+  - **Maps JavaScript API**
+  
+For more details, check [Google Maps API Setup](https://developers.google.com/maps/gmp-get-started).
+
+## Disclaimer
+This application uses an AI model for disease classification based on images. **Results are for informational purposes only and do not replace professional medical consultation.** Always seek a qualified healthcare provider for an accurate diagnosis and treatment.
+
+## License
+**© 2024 Eric Oliveira**
+This project is licensed under the MIT License.
 
 ---
-![image](images/transform.png)
 
-## Model Training
-
-Training Data: 51 images (31 leishmaniasis, 21 pyoderma).
-Architecture: AlexNet with convolutional layers for feature extraction, followed by dense layers with dropout for binary classification.
-Binary Classification: Adapted to differentiate between leishmaniasis and pyoderma.
-
-![image](images/model_architecture.png)
-
-## Evaluation
-
-### The model achieved:
-High Precision: Accurate results on test images.
-Results: 81.25% accuracy, with a minor error rate for leishmaniasis and pyoderma misclassifications.
-
-![image](images/loss.png)
-![image](images/cm.png)
-
-## Software Development
-The application was built using Streamlit, allowing users to upload lesion images or capture them via their device’s camera to obtain classification results.
-
-![image](images/front-end.png)
-![image](images/infer.png)
-
-## Conclusion
-
-### Strengths
-This study presents a pioneering solution to differentiate between leishmaniasis and pyoderma lesions, demonstrating high precision and specificity even with limited data. LeisHtic.IA shows potential for future development as a triage tool.
-
-### Limitations
-Due to the small dataset, the results lack statistical significance, and training adjustments were made without a validation set.
-
-## Future Work
-
-The project aims to expand the dataset by partnering with research institutions to strengthen the model and broaden the clinical applicability of LeisHtic.IA.
-
-## References
-
-- Anwar, M.; Khan, A.; Ahmed, R. "Image Processing for mHealth-Based Approach to Detect the Local Tissue Inflammation in Cutaneous Leishmaniasis: A Proof of Concept Study." Journal of Medical Imaging and Health Informatics, 2021.
-- Rodriguez, J. A.; Gomez, E. A.; Perez, L. M. "Automated Identification of Cutaneous Leishmaniasis Lesions Using Deep-Learning-Based Artificial Intelligence." International Journal of Dermatology Research, 2022.
+**Contributions are welcome!** Feel free to submit issues or pull requests to improve the project.

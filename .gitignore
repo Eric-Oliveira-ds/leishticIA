@@ -2,6 +2,10 @@
 __pycache__/
 *.py[cod]
 *$py.class
+*mlruns
+*mlartifacts
+*.pth
+*.streamlit
 
 # C extensions
 *.so

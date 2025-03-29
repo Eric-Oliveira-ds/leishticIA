@@ -5,13 +5,26 @@ import torch.nn.functional as F
 from torchvision import models, transforms
 from PIL import Image
 
-# Ensure the architecture matches your trained model
-model = models.alexnet(pretrained=False)
-model.classifier[6] = torch.nn.Linear(4096, 2)  # Update output layer to have 2 outputs
 
-# Load the model weights
-model.load_state_dict(torch.load('model/alexnet_acc81_weights.pth'))
-model.eval()  # Set the model to evaluation mode
+@st.cache_resource(show_spinner=False)
+def load_model():
+    """
+    Load a pre-trained AlexNet model and weights from a file.
+
+    Returns:
+        A pre-trained AlexNet model with 5 output classes, loaded from a file.
+    """
+    model = models.alexnet(weights='AlexNet_Weights.IMAGENET1K_V1')
+    model.classifier[6] = torch.nn.Linear(4096, 6)
+    model.load_state_dict(torch.load('models/alexnet_acc_0.74_num_classes6_weights.pth',
+                                     weights_only=True,
+                                     map_location=torch.device('cpu')))
+    model.eval()
+
+    return model
+
+
+model = load_model()
 
 # Define image transformations
 transform = transforms.Compose([
@@ -21,48 +34,67 @@ transform = transforms.Compose([
 ])
 
 
+# Classes do modelo
+CLASSES = [
+    "Carcinoma Basocelular",
+    "Diabetes",
+    "Leishmaniose",
+    "Sem Lesão",
+    "Pioderma",
+    "Venosa"
+]
+
+MENSAGENS = [
+    "A lesão aparenta ser causada por carcinoma basocelular.",
+    "A lesão aparenta ser causada por diabetes.",
+    "A lesão aparenta ser causada por leishmaniose.",
+    "Você não aparenta ter uma lesão. Tem certeza que subiu uma foto de qualidade e com uma lesão cutânea?",
+    "A lesão aparenta ser causada por pioderma.",
+    "A lesão aparenta ser causada por doença venosa."
+]
+
+
 def classify_image(image):
+
+    # Pré-processamento da imagem
     """
-    Classifies the given image to detect leishmaniasis lesions.
+    Classifies an input image into one of the predefined classes.
 
-    Args:
-        image (numpy.ndarray): Loaded image to classify.
+    This function processes the input image to predict its class using
+    a pre-trained AlexNet model. It transforms the image, makes predictions,
+    and returns the most probable class along with its probability. If the
+    probability is high enough, a message related to the predicted class is
+    displayed.
 
-    Returns:
-        torch.Tensor: Predicted probabilities for each class.
+    Parameters
+    ----------
+    image : np.ndarray
+        The input image as a NumPy array in BGR format.
 
+    Returns
+    -------
+    tuple
+        A tuple containing the predicted class (str) and the maximum probability (float).
     """
-    # Preprocess the image
     image = Image.fromarray(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
     img = transform(image).unsqueeze(0)
 
-    # Perform prediction with the model
+    # Predição
     with torch.no_grad():
         outputs = model(img)
-        probability = F.softmax(outputs, dim=1)
-        max_probability = torch.max(probability).item()
-        predicted_class = torch.argmax(probability).item()
+        probabilities = F.softmax(outputs, dim=1)
 
-    # Check if confidence is high enough for classification
+    # Obter a classe com maior probabilidade
+    max_probability, predicted_class = torch.max(probabilities, dim=1)
+    max_probability = max_probability.item()
+    predicted_class = predicted_class.item()
+
+    # Exibir resultado
     if max_probability >= 0.7:
-        formatted_probability = max_probability * 100
-        if predicted_class == 0:
-            st.write(
-                f'A lesão aparenta ser leishmaniose com uma probabilidade de: '
-                f'{formatted_probability:.2f}%'
-            )
-        else:
-            st.write(
-                f'A lesão aparenta ser pioderma com uma probabilidade de: '
-                f'{formatted_probability:.2f}%'
-            )
+        st.write(f"{MENSAGENS[predicted_class]} Probabilidade: {max_probability * 100:.0f}%")
+        if predicted_class != 5:
+            st.write("Consulte hospitais especializados mais próximos para uma avaliação médica!")
     else:
-        st.write(
-            "Confiança insuficiente para uma classificação precisa. "
-            "Tente uma imagem mais clara."
-        )
+        st.write("Confiança insuficiente para uma classificação precisa. Tente uma imagem mais clara.")
 
-    st.write(
-        'Consulte hospitais especializados mais próximos para uma avaliação médica!'
-    )
-    return probability
+    return CLASSES[predicted_class], max_probability
