@@ -4,7 +4,7 @@
 LeisHtic.IA is a research project that leverages artificial intelligence (AI) to classify skin lesion images associated with diseases such as **leishmaniasis, pyoderma, diabetes, venous ulcers, and carcinoma basocelular**. The goal is to assist in diagnosis and improve treatment efficiency.
 
 ## Gif Demo
-![image](images/gif.gif)
+![image](images/demo_leishticia.gif)
 
 ## Features
 
@@ -41,7 +41,7 @@ LeisHtic.IA is a research project that leverages artificial intelligence (AI) to
 ## Installation & Setup
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/LeisHticIA.git
+git clone https://github.com/Eric-Oliveira-ds/leishticIA/tree/main
 cd LeisHticIA
 
 # Create a virtual environment
